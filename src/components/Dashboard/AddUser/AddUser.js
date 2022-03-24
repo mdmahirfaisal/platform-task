@@ -15,7 +15,7 @@ const AddUser = () => {
                     Swal.fire({
                         position: 'top-center',
                         icon: 'success',
-                        title: 'New product added Successfully',
+                        title: 'New User Added Successfully',
                         showConfirmButton: false,
                         timer: 3000
                     })
@@ -24,7 +24,7 @@ const AddUser = () => {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Order placed Canceled!',
+                        text: 'User add Canceled!',
                     })
                 }
             })

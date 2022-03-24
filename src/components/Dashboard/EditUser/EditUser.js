@@ -56,7 +56,7 @@ const EditUser = () => {
                 Swal.fire({
                     position: 'top-center',
                     icon: 'success',
-                    title: 'This product edit Successfully',
+                    title: 'This User edit Successfully',
                     showConfirmButton: false,
                     timer: 3000
                 })

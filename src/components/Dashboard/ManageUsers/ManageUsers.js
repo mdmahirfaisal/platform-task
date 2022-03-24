@@ -25,7 +25,7 @@ const ManageUsers = () => {
             .then(data => setUsersData(data))
             .catch(error => Swal.fire({
                 icon: 'error',
-                title: `Set to ${error}`,
+                title: `${error}`,
                 showConfirmButton: false,
                 timer: 3000
             }));
@@ -73,7 +73,7 @@ const ManageUsers = () => {
             ) {
                 swalWithBootstrapButtons.fire(
                     'Cancelled',
-                    'this file is safe :)',
+                    'this file is safe',
                     'error'
                 )
             }
