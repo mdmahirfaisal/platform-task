@@ -11,7 +11,6 @@ const useFirebase = () => {
     const [authError, setAuthError] = useState('');
     const [loading, setLoading] = useState(true);
 
-
     const auth = getAuth();
     const googleProvider = new GoogleAuthProvider();
 

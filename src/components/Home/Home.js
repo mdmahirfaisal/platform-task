@@ -9,7 +9,7 @@ import useAuth from '../../hooks/useAuth';
 
 const Home = () => {
     const { register, handleSubmit } = useForm();
-    const { user, signInWithGoogle, registerUser, loginUser, } = useAuth();
+    const { user, logOut, signInWithGoogle, registerUser, loginUser, } = useAuth();
     const [newName, setNewName] = useState("");
     const [newEmail, setNewEmail] = useState("");
     const [newPass, setNewPass] = useState("");
@@ -45,10 +45,13 @@ const Home = () => {
             <div className="bg-gray-100 h-screen">
                 {user.email ?
                     <>
-                        <h1 className='text-4xl text-center pt-12'>Welcome</h1>
-                        <h1 className='w-96 mx-auto pb-12 mt-5'><Link to="/dashboard">
+                        <h1 className='text-4xl text-center pt-12'>Welcome to Platform Integration</h1>
+                        <h1 className='w-96 mx-auto  mt-5'><Link to="/dashboard">
                             <Button color='secondary' variant='contained'>Please go to dashboard</Button>
                         </Link> </h1>
+                        <h1 className='w-96 mx-auto pb-12 mt-2'>
+                            <Button onClick={logOut} color='secondary' variant='contained'>SIGN OUT</Button>
+                        </h1>
                     </>
                     :
                     <>

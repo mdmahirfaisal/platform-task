@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2'
-import { useParams } from 'react-router-dom';
-import { Button, Paper, TextField } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Button, Paper } from '@mui/material';
+import axios from 'axios';
 
 const EditUser = () => {
     const { id } = useParams();
     const { register, handleSubmit } = useForm();
-    const [productImg, setProductImg] = useState(null)
-    const [product, setProduct] = useState({})
-    const [productImgName, setProductImgName] = useState("Image not selected")
-    console.log(product)
-
-
+    const [editUser, setEditUser] = useState({})
+    const navigate = useNavigate();
 
     // load single data 
     useEffect(() => {
-        fetch(`https://mysterious-waters-68327.herokuapp.com/products/${id}`)
+        fetch(`https://sheltered-eyrie-88520.herokuapp.com/users/${id}`)
             .then(res => res.json())
-            .then(data => setProduct(data))
+            .then(data => setEditUser(data))
             .catch(error => Swal.fire({
                 icon: 'error',
                 title: `${error}`,
@@ -27,94 +24,70 @@ const EditUser = () => {
             }));
     }, [id]);
 
-
-
-    // upload image
-    // const handleImgUpload = async e => {
-    //     const imageData = new FormData();
-    //     setProductImgName(e.target.files[0].name);
-    //     imageData.set('key', 'b1329658ac9cd12416e1b24f8e686347');
-    //     await imageData.append('image', e.target.files[0])
-
-    //     axios.post('https://api.imgbb.com/1/upload',
-    //         imageData)
-    //         .then(response => {
-    //             console.log(response.data.data.display_url);
-
-    //             setProductImg(response.data.data.display_url);
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //         });
-    // };
-    const onSubmit = productData => {
-        console.log(productData);
+    const onSubmit = userData => {
         let data = {}
-        if (productImg) {
-            data.img = productImg;
+        if (userData.name) {
+            data.name = userData.name
         }
         else {
-            data.img = product.img;
+            data.name = editUser.name
         }
-        if (productData.name) {
-            data.name = productData.name
-        }
-        else {
-            data.name = product.name
-        }
-        if (productData.price) {
-            data.price = productData.price
+        if (userData.email) {
+            data.email = userData.email
         }
         else {
-            data.price = product.price
+            data.email = editUser.email
         }
-        if (productData.description) {
-            data.description = productData.description
+        if (userData.password) {
+            data.password = userData.password
         }
         else {
-            data.description = product.description
+            data.password = editUser.password
         }
-        data.id = product?._id
+        if (userData.phone) {
+            data.phone = userData.phone
+        }
+        else {
+            data.phone = editUser.phone
+        }
 
-        // axios.put('https://mysterious-waters-68327.herokuapp.com/updateProduct', data)
-        //     .then(res => {
-        //         console.log(res)
-        //         Swal.fire({
-        //             position: 'top-center',
-        //             icon: 'success',
-        //             title: 'This product edit Successfully',
-        //             showConfirmButton: false,
-        //             timer: 3000
-        //         })
-        //     })
-        //     .catch(error => {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'Oops...',
-        //             text: `${error}`,
-        //         })
-        //     })
-
+        axios.put(`https://sheltered-eyrie-88520.herokuapp.com/users?id=${editUser._id}`, data)
+            .then(res => {
+                Swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'This product edit Successfully',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+                if (res.data.modifiedCount > 0) {
+                    navigate('/dashboard/manageUsers')
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: `${error}`,
+                })
+            })
     };
-
-    const uploadFile = () => {
-        document.getElementById('productImg').click();
-    }
 
     return (
         <div>
             <h1 className='text-3xl lg:text-4xl text-gray-700 my-4 font-semibold'>THIS IS EDIT USER</h1>
             <Paper elevation={3} >
-
-                <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-8'>
-                    <TextField type="text" {...register("name")} label="Full Name" variant="outlined" required />
-                    <TextField type="text" {...register("email")} label="Full Name" variant="outlined" required />
-                    <TextField type="text" {...register("password")} label="Full Name" variant="outlined" required />
-                    <TextField type="text" {...register("phone")} label="Full Name" variant="outlined" required />
-                    <TextField type="text" {...register("address")} label="Full Name" variant="outlined" required />
-                    <Button type='submit' variant='contained' color='secondary'>ADD USER</Button>
+                <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-3 p-3'>
+                    <p className='text-left text-md ml-2'>Name</p>
+                    <input className='border-2 p-3' defaultValue={editUser.name || ""} type="text" {...register("name")} variant="outlined" required />
+                    <p className='text-left text-md ml-2'>Email</p>
+                    <input className='border-2 p-3' defaultValue={editUser.email || ""} type="email" {...register("email")} variant="outlined" required />
+                    <p className='text-left text-md ml-2'>Password</p>
+                    <input className='border-2 p-3' defaultValue={editUser.password || ""} type="password" {...register("password")} variant="outlined" required />
+                    <p className='text-left text-md ml-2'>Phone</p>
+                    <input className='border-2 p-3' defaultValue={editUser.phone || ""} type="number" {...register("phone")} variant="outlined" required />
+                    <Button type='submit' variant='contained' color='secondary'>UPDATE USER</Button>
                 </form>
-
             </Paper>
         </div>
     );
